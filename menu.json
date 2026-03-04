@@ -1,0 +1,182 @@
+{
+  "1": [
+    {
+      "id": "1-1",
+      "label": ":~Sectie-~1:_Herkenning.",
+      "title": ":~Sectie-~1:_Herkenning.",
+      "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\r\n\r\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\r\n\r\nCurabitur pretium tincidunt lacus. Nulla gravida orci a odio. Nullam varius, turpis et commodo pharetra, est eros bibendum elit, nec luctus magna felis sollicitudin mauris. Integer in mauris eu nibh euismod gravida."
+    },
+    {
+      "id": "1-2",
+      "label": ":~Sectie-~2:_Communicatie.",
+      "title": ":~Sectie-~2:_Communicatie.",
+      "text": "Lorem ipsum beta."
+    },
+    {
+      "id": "1-3",
+      "label": ":~Sectie-~3:_Perceptie.",
+      "title": ":~Sectie-~3:_Perceptie.",
+      "text": "Lorem ipsum gamma."
+    }
+  ],
+  "2": [
+    {
+      "id": "2-1",
+      "label": ":~Sectie-~4:_Oriëntatie.",
+      "title": ":~Sectie-~4:_Oriëntatie.",
+      "text": "Dummy tekst één."
+    },
+    {
+      "id": "2-2",
+      "label": ":~Sectie-~5:_Inzicht.",
+      "title": ":~Sectie-~5:_Inzicht.",
+      "text": "Dummy tekst twee."
+    },
+    {
+      "id": "2-3",
+      "label": ":~Sectie-~6:_Begrippen.",
+      "title": ":~Sectie-~6:_Begrippen.",
+      "text": "Dummy tekst drie."
+    }
+  ],
+  "3": [
+    {
+      "id": "3-1",
+      "label": ":~Sectie-~7:_Energie.",
+      "title": ":~Sectie-~7:_Energie.",
+      "text": "Onzin voorbeeld A."
+    },
+    {
+      "id": "3-2",
+      "label": ":~Sectie-~8:_Afstelling.",
+      "title": ":~Sectie-~8:_Afstelling.",
+      "text": "Onzin voorbeeld B."
+    },
+    {
+      "id": "3-3",
+      "label": ":~Sectie-~9:_Lichaam.",
+      "title": ":~Sectie-~9:_Lichaam.",
+      "text": "Onzin voorbeeld C."
+    }
+  ],
+  "4": [
+    {
+      "id": "4-1",
+      "label": ":~Sectie-~10:_Voorspelling.",
+      "title": ":~Sectie-~10:_Voorspelling.",
+      "text": "Willekeurige tekst X."
+    },
+    {
+      "id": "4-2",
+      "label": ":~Sectie-~11:_Activiteit.",
+      "title": ":~Sectie-~11:_Activiteit.",
+      "text": "Willekeurige tekst Y."
+    },
+    {
+      "id": "4-3",
+      "label": ":~Sectie-~12:_Product.",
+      "title": ":~Sectie-~12:_Product.",
+      "text": "Willekeurige tekst Z."
+    }
+  ],
+  "5": [
+    {
+      "id": "5-1",
+      "label": ":~Sectie-~13:_Resultaat.",
+      "title": ":~Sectie-~13:_Resultaat.",
+      "text": "Random content 1."
+    },
+    {
+      "id": "5-2",
+      "label": ":~Sectie-~14:_Correctie.",
+      "title": ":~Sectie-~14:_Correctie.",
+      "text": "Random content 2."
+    },
+    {
+      "id": "5-3",
+      "label": ":~Sectie-~15:_Bekwaamheid.",
+      "title": ":~Sectie-~15:_Bekwaamheid.",
+      "text": "Random content 3."
+    }
+  ],
+  "6a": [
+    {
+      "id": "6a-1",
+      "label": ":~Sectie-~16:_Doelstellingen.",
+      "title": ":~Sectie-~16:_Doelstellingen.",
+      "text": "Placeholder A."
+    },
+    {
+      "id": "6a-2",
+      "label": ":~Sectie-~17:_Doelen.",
+      "title": ":~Sectie-~17:_Doelen.",
+      "text": "Placeholder B."
+    },
+    {
+      "id": "6a-3",
+      "label": ":~Sectie-~18:_Realisatie.",
+      "title": ":~Sectie-~18:_Realisatie.",
+      "text": "Placeholder C."
+    }
+  ],
+  "6b": [
+    {
+      "id": "6b-1",
+      "label": ":~Sectie-~16:_Doelstellingen.",
+      "title": ":~Sectie-~16:_Doelstellingen.",
+      "text": "Filler tekst 1."
+    },
+    {
+      "id": "6b-2",
+      "label": ":~Sectie-~17:_Doelen.",
+      "title": ":~Sectie-~17:_Doelen.",
+      "text": "Filler tekst 2."
+    },
+    {
+      "id": "6b-3",
+      "label": ":~Sectie-~18:_Realisatie.",
+      "title": ":~Sectie-~18:_Realisatie.",
+      "text": "Filler tekst 3."
+    }
+  ],
+  "6c": [
+    {
+      "id": "6c-1",
+      "label": ":~Sectie-~16:_Doelstellingen.",
+      "title": ":~Sectie-~16:_Doelstellingen.",
+      "text": "Test inhoud A."
+    },
+    {
+      "id": "6c-2",
+      "label": ":~Sectie-~17:_Doelen.",
+      "title": ":~Sectie-~17:_Doelen.",
+      "text": "Test inhoud B."
+    },
+    {
+      "id": "6c-3",
+      "label": ":~Sectie-~18:_Realisatie.",
+      "title": ":~Sectie-~18:_Realisatie.",
+      "text": "Test inhoud C."
+    }
+  ],
+  "7": [
+    {
+      "id": "7-1",
+      "label": ":~Sectie-~19:_Bron.",
+      "title": ":~Sectie-~19:_Bron.",
+      "text": "Sample tekst 1."
+    },
+    {
+      "id": "7-2",
+      "label": ":~Sectie-~20:_Bestaan.",
+      "title": ":~Sectie-~20:_Bestaan.",
+      "text": "Sample tekst 2."
+    },
+    {
+      "id": "7-3",
+      "label": ":~Sectie-~21:_Conditie.",
+      "title": ":~Sectie-~21:_Conditie.",
+      "text": "Sample tekst 3."
+    }
+  ]
+}

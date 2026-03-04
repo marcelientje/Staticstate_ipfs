@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Static State</title>
+
+  <style>
+    text {
+      font-family: "Segoe UI", Arial, sans-serif;
+      font-size: 30px;
+      font-weight: 600;
+      fill: #1f2933;
+      cursor: pointer;
+      transition: fill 0.2s ease;
+      user-select: none;
+    }
+    text:hover { fill: #c9b37e; }
+
+    .num-small { font-size: 20px; }
+    .svg-path { fill: #ffffff; }
+    body { margin: 0; padding: 0; background: #000; }
+
+    /* ✅ Desktop: SVG schuift NIET naar beneden; schuift evt. naar rechts (via --svgShift) */
+    .wrap {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 20px;
+
+      --svgShift: 0px; /* JS kan dit zetten op desktop */
+      --bgH: 0px;      /* JS zet dit op mobiel (ruimte boven SVG) */
+    }
+
+    /* ✅ Desktop: plaatje linksboven + kleiner */
+    .bg-staticstate {
+      position: absolute;
+      left: 20px;
+      top: 20px;
+      transform: none;
+
+      width: min(35vw, 420px);
+      height: auto;
+
+      z-index: 0;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    svg {
+      width: 95vw;
+      max-width: 1000px;
+      height: auto;
+      display: block;
+      position: relative;
+      z-index: 1;
+
+      transform: translateX(var(--svgShift));
+      transition: transform 0.2s ease;
+    }
+
+    /* ✅ Telefoon: plaatje bovenaan (gecentreerd) + SVG krijgt automatisch ruimte erboven */
+    @media (max-width: 600px) {
+      .wrap {
+        padding: calc(12px + var(--bgH)) 12px 12px;
+      }
+
+      .bg-staticstate {
+        left: 50%;
+        top: 10px;
+        transform: translateX(-50%);
+        width: min(86vw, 320px);
+      }
+
+      svg { transform: none; }
+    }
+
+    .highlight3 { fill: #ffffff; }
+
+    .triptych {
+      position: fixed;
+      width: 0px;
+      height: 0px;
+      background: linear-gradient(135deg, #2b3440, #1f2933);
+      border: 1px solid rgba(201, 179, 126, 0.6);
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transition: width 0.25s ease, height 0.25s ease, opacity 0.2s ease;
+      transform-origin: top left;
+      visibility: hidden;
+      opacity: 0;
+      z-index: 1000;
+    }
+
+    .panel {
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      color: #f5f5f5;
+      cursor: pointer;
+      transition: background 0.25s ease, color 0.25s ease;
+      user-select: none;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 16px;
+      padding: 0 14px;
+      text-align: left;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .panel:last-child { border-bottom: none; }
+    .panel:hover { background: rgba(201, 179, 126, 0.15); color: #c9b37e; }
+
+    /* ✅ Tekstbox (met mobiel-fix tegen “tekst verdwijnt rechts”) */
+    #content {
+      display: none;
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+
+      width: 50vw;
+      height: 50vh;
+
+      max-width: calc(100vw - 40px);
+      max-height: calc(100vh - 40px);
+
+      overflow-y: auto;
+      background-color: #1f2933;
+      background-image: linear-gradient(135deg, #2b3440, #1f2933);
+      border: 1px solid rgba(201, 179, 126, 0.35);
+      border-radius: 14px;
+      padding: 18px;
+      color: #f5f5f5;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.45);
+      z-index: 9999;
+
+      box-sizing: border-box;
+      overflow-x: hidden;
+      word-break: break-word;
+      overflow-wrap: anywhere;
+
+      transition:
+        width 0.25s ease,
+        height 0.25s ease,
+        top 0.25s ease,
+        left 0.25s ease,
+        right 0.25s ease,
+        bottom 0.25s ease,
+        border-radius 0.25s ease;
+    }
+
+    /* ✅ fullscreen toggle zonder overflow */
+    #content.fullscreen {
+      inset: 0;
+      width: auto;
+      height: auto;
+      max-width: 100%;
+      max-height: 100%;
+      border-radius: 0;
+      padding: 16px;
+    }
+
+    @media (max-width: 600px) {
+      #content {
+        right: 12px;
+        bottom: 12px;
+        max-width: calc(100vw - 24px);
+        max-height: calc(100vh - 24px);
+      }
+      #content.fullscreen { padding: 14px; }
+    }
+
+    .content-actions {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+      align-items: center;
+    }
+    .content-actions .hint { font-size: 12px; color: rgba(245,245,245,0.75); }
+    .content-actions button {
+      background: rgba(201, 179, 126, 0.15);
+      border: 1px solid rgba(201, 179, 126, 0.35);
+      color: #c9b37e;
+      border-radius: 10px;
+      padding: 6px 10px;
+      cursor: pointer;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .content-actions button:hover { background: rgba(201, 179, 126, 0.22); }
+
+    .content-block { display: none; }
+    .content-block.active { display: block; }
+    .content-block h2 { margin: 0 0 10px 0; color: #c9b37e; font-size: 18px; }
+    .content-block p { margin: 0; color: #e7e7e7; line-height: 1.45; font-size: 14px; }
+  </style>
+
+  <script>
+    let MENU = {}; // wordt geladen uit menu.json
+
+    async function loadMenuJson() {
+      const res = await fetch('menu.json', { cache: 'no-store' });
+      if (!res.ok) throw new Error('menu.json niet gevonden of niet leesbaar');
+      MENU = await res.json();
+      buildContentBlocksFromMenu(MENU);
+    }
+
+    function buildContentBlocksFromMenu(menuObj) {
+      const content = document.getElementById('content');
+      const blocksHost = document.getElementById('content-blocks');
+      blocksHost.innerHTML = '';
+
+      const seen = new Set();
+      Object.values(menuObj).flat().forEach(item => {
+        const domId = 'activity-' + item.id;
+        if (seen.has(domId)) return;
+        seen.add(domId);
+
+        const div = document.createElement('div');
+        div.className = 'content-block';
+        div.id = domId;
+        div.innerHTML =
+          `<h2>${escapeHtml(item.title ?? item.label)}</h2>` +
+          `<p>${escapeHtml(item.text ?? item.label)}</p>`;
+        blocksHost.appendChild(div);
+      });
+
+      content.style.display = 'none';
+      content.classList.remove('fullscreen');
+    }
+
+    function escapeHtml(s) {
+      return String(s ?? '').replace(/[&<>"']/g, m => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
+      }[m]));
+    }
+
+    function showTriptych(evt, key) {
+      const triptych = document.getElementById('triptych');
+      const items = MENU[key];
+      if (!items) return;
+
+      const W = 360;
+      const H = 44 * items.length;
+
+      const leftPos = Math.max(10, Math.min(window.innerWidth - (W + 10), evt.clientX + 10));
+      const topPos  = Math.max(10, Math.min(window.innerHeight - (H + 10), evt.clientY + 10));
+
+      triptych.style.left = `${leftPos}px`;
+      triptych.style.top  = `${topPos}px`;
+      triptych.style.visibility = 'visible';
+      triptych.style.opacity = '0';
+      triptych.style.width = '0px';
+      triptych.style.height = '0px';
+
+      triptych.innerHTML = items.map(it =>
+        `<div class="panel" onclick="showContent('${it.id}')">${it.label}</div>`
+      ).join('');
+
+      setTimeout(() => {
+        triptych.style.width = `${W}px`;
+        triptych.style.height = `${H}px`;
+        triptych.style.opacity = '1';
+      }, 10);
+    }
+
+    function hideTriptych() {
+      const triptych = document.getElementById('triptych');
+      triptych.style.opacity = '0';
+      setTimeout(() => {
+        triptych.style.width = '0px';
+        triptych.style.height = '0px';
+        triptych.style.visibility = 'hidden';
+      }, 250);
+    }
+
+    function showContent(id) {
+      const content = document.getElementById('content');
+      content.style.display = 'block';
+
+      document.querySelectorAll('.content-block').forEach(el => el.classList.remove('active'));
+      const target = document.getElementById('activity-' + id);
+      if (target) target.classList.add('active');
+
+      hideTriptych();
+    }
+
+    function closeContent() {
+      document.querySelectorAll('.content-block').forEach(el => el.classList.remove('active'));
+      const content = document.getElementById('content');
+      content.classList.remove('fullscreen');
+      content.style.display = 'none';
+    }
+
+    function toggleContentFullscreen() {
+      const content = document.getElementById('content');
+      if (content.style.display === 'none' || !content.style.display) return;
+      content.classList.toggle('fullscreen');
+    }
+
+    function adjustLayout() {
+      const wrap = document.querySelector('.wrap');
+      const bg = document.querySelector('.bg-staticstate');
+      const svg = document.querySelector('svg');
+      if (!wrap || !bg || !svg) return;
+
+      const isMobile = window.matchMedia('(max-width: 600px)').matches;
+
+      const bgRect = bg.getBoundingClientRect();
+      if (bgRect.width === 0 || bgRect.height === 0) return;
+
+      if (isMobile) {
+        // ✅ Telefoon: ruimte boven SVG gebaseerd op echte image-hoogte
+        const topGap = 10;   // mobile top
+        const extra = 16;
+        const bgH = Math.ceil(bgRect.height + topGap + extra);
+        wrap.style.setProperty('--bgH', `${bgH}px`);
+        wrap.style.setProperty('--svgShift', '0px');
+        return;
+      }
+
+      // ✅ Desktop: geen top padding; alleen naar rechts schuiven bij overlap
+      wrap.style.setProperty('--bgH', '0px');
+      wrap.style.setProperty('--svgShift', '0px');
+
+      // force reflow so svgRect meets shift=0
+      const svgRect = svg.getBoundingClientRect();
+
+      const margin = 16;
+      const overlap = (bgRect.right + margin) - svgRect.left;
+      const shift = overlap > 0 ? Math.ceil(overlap) : 0;
+
+      wrap.style.setProperty('--svgShift', `${shift}px`);
+    }
+
+    window.addEventListener('DOMContentLoaded', async () => {
+      try {
+        await loadMenuJson();
+
+        // ✅ klik op content => fullscreen toggle (maar niet als je op de sluitknop klikt)
+        const content = document.getElementById('content');
+        content.addEventListener('click', (e) => {
+          if (e.target.closest('button')) return;
+          toggleContentFullscreen();
+        });
+
+        const bg = document.querySelector('.bg-staticstate');
+        if (bg) {
+          if (bg.complete) adjustLayout();
+          bg.addEventListener('load', adjustLayout);
+        }
+
+        const onResize = () => {
+          clearTimeout(window.__layoutTimer);
+          window.__layoutTimer = setTimeout(adjustLayout, 80);
+        };
+
+        window.addEventListener('resize', onResize);
+        window.addEventListener('orientationchange', onResize);
+
+        setTimeout(adjustLayout, 50);
+      } catch (e) {
+        console.error(e);
+        alert("Kon menu.json niet laden. Start via webserver (python3 -m http.server) en check of menu.json naast index.html staat.");
+      }
+    });
+  </script>
+</head>
+
+<body>
+  <div class="wrap">
+    <img class="bg-staticstate" src="img/staticstate.jpg" alt="" />
+
+    <svg xmlns="http://www.w3.org/2000/svg"
+         viewBox="0 0 504.121 504.121"
+         preserveAspectRatio="xMidYMid meet">
+      <g>
+        <path class="svg-path" d="M67.056,424.129C35.99,379.105,40.424,316.948,80.51,276.894 c40.062-40.054,102.211-44.536,147.243-13.446l33.367-33.398c-63.614-49.073-155.309-44.497-213.638,13.832 s-62.897,150.032-13.808,213.638L67.056,424.129z"/>
+        <path class="svg-path" d="M437.043,79.994c31.09,45.024,26.632,107.166-13.43,147.235 c-40.062,40.062-102.227,44.52-147.243,13.438l-33.39,33.39c63.638,49.081,155.317,44.505,213.654-13.824 c58.329-58.329,62.905-150.008,13.824-213.63L437.043,79.994z"/>
+        <path class="svg-path" d="M79.99,437.063c45.024,31.067,107.181,26.632,147.243-13.454 c40.062-40.062,44.528-102.211,13.438-147.235l33.39-33.375c49.081,63.614,44.513,155.301-13.824,213.63 c-58.329,58.344-150.024,62.905-213.638,13.824L79.99,437.063z"/>
+        <path class="svg-path" d="M424.141,67.076c-45.04-31.082-107.181-26.624-147.243,13.43 c-40.07,40.062-44.536,102.227-13.446,147.251l-33.39,33.382c-49.081-63.638-44.505-155.309,13.824-213.654 c58.321-58.329,150.016-62.905,213.622-13.824L424.141,67.076z"/>
+      </g>
+
+      <text x="130" y="488" class="num-small" onmouseover="showTriptych(event, '1')">:~1.</text>
+      <text x="255" y="400" class="num-small" onmouseover="showTriptych(event, '2')">:~2.</text>
+      <text x="233" y="260" class="highlight3 num-small" onmouseover="showTriptych(event, '3')">:~3.</text>
+      <text x="210" y="120" class="num-small" onmouseover="showTriptych(event, '4')">:~4.</text>
+      <text x="320" y="33"  class="num-small" onmouseover="showTriptych(event, '5')">:~5.</text>
+      <text x="457" y="160" class="num-small" onmouseover="showTriptych(event, '6a')">:~6a.</text>
+      <text x="370" y="280" class="num-small" onmouseover="showTriptych(event, '6b')">:~6b.</text>
+      <text x="120" y="230" class="num-small" onmouseover="showTriptych(event, '6c')">:~6c.</text>
+      <text x="8"  y="330"  class="num-small" onmouseover="showTriptych(event, '7')">:~7.</text>
+    </svg>
+  </div>
+
+  <div id="triptych" class="triptych" onmouseleave="hideTriptych()"></div>
+
+  <div id="content">
+    <div class="content-actions">
+      <div class="hint">Klik een sectie in het menu om tekst te tonen. (Klik in dit vlak = fullscreen)</div>
+      <button onclick="closeContent()">Sluit</button>
+    </div>
+    <div id="content-blocks"></div>
+  </div>
+</body>
+</html>
+
